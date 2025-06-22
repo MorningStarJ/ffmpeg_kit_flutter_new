@@ -15,10 +15,10 @@ Pod::Spec.new do |s|
   s.source_files        = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
 
-  s.default_subspec = 'full-gpl-lts'
+  s.default_subspec = 'full'
 
   s.dependency          'Flutter'
-  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386 arm64' }
+  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
 
   s.subspec 'min' do |ss|
     ss.source_files         = 'Classes/**/*'
@@ -105,47 +105,14 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'full' do |ss|
+    # s.prepare_command = <<-CMD
+    #   curl -L https://github.com/luthviar/ffmpeg-kit-ios-full/releases/download/v6.0/ffmpeg-kit-ios-full.zip -o ffmpeg-kit.zip
+    #   unzip -o ffmpeg-kit.zip
+    #   rm ffmpeg-kit.zip
+    # CMD
     ss.source_files         = 'Classes/**/*'
     ss.public_header_files  = 'Classes/**/*.h'
-    ss.dependency 'ffmpeg-kit-ios-full', "5.1"
-    ss.ios.deployment_target = '14.0'
-  end
-
-  s.subspec 'full-lts' do |ss|
-    ss.source_files         = 'Classes/**/*'
-    ss.public_header_files  = 'Classes/**/*.h'
-    ss.dependency 'ffmpeg-kit-ios-full', "5.1.LTS"
-    ss.ios.deployment_target = '14.0'
-  end
-
-  s.subspec 'full-gpl' do |ss|
-    ss.source_files         = 'Classes/**/*'
-    ss.public_header_files  = 'Classes/**/*.h'
-    ss.dependency 'ffmpeg-kit-ios-full-gpl', "5.1"
-    ss.ios.deployment_target = '14.0'
-  end
-
-  s.subspec 'full-gpl-lts' do |ss|
-    # Adding pre-install hook
-    s.prepare_command = <<-CMD
-      if [ ! -d "./Frameworks" ]; then
-        chmod +x ../scripts/setup_ios.sh
-        ../scripts/setup_ios.sh
-        fi
-    CMD
-    ss.source_files         = 'Classes/**/*'
-    ss.public_header_files  = 'Classes/**/*.h'
-    ss.ios.vendored_frameworks = 'Frameworks/ffmpegkit.framework',
-                                 'Frameworks/libavcodec.framework',
-                                 'Frameworks/libavdevice.framework',
-                                 'Frameworks/libavfilter.framework',
-                                 'Frameworks/libavformat.framework',
-                                 'Frameworks/libavutil.framework',
-                                 'Frameworks/libswresample.framework',
-                                 'Frameworks/libswscale.framework'
-    
-    ss.ios.frameworks = 'AudioToolbox', 'CoreMedia'
-    ss.libraries = 'z', 'bz2', 'c++', 'iconv'
+    ss.vendored_frameworks = 'ffmpeg-kit-ios-full/*.xcframework'
     ss.ios.deployment_target = '14.0'
   end
 
